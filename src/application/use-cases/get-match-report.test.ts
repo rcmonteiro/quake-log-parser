@@ -16,18 +16,29 @@ describe('Get Match Report Use Case (unit tests)', () => {
       expect(result.value?.matches[0]).toEqual({
         id: 'game_1',
         total_kills: 0,
-        players: [],
-        kills: {},
+        players: ['Isgalamido'],
+        kills: {
+          Isgalamido: 0,
+        },
+        ranking: {
+          Isgalamido: 0,
+        },
       })
       expect(result.value?.matches[1]).toEqual({
         id: 'game_2',
         total_kills: 105,
-        players: ['Isgalamido', 'Dono da Bola', 'Zeh', 'Assasinu Credi'],
+        players: ['Dono da Bola', 'Isgalamido', 'Zeh', 'Assasinu Credi'],
         kills: {
-          'Dono da Bola': 20,
           Isgalamido: 27,
           Zeh: 22,
-          'Assasinu Credi': 16,
+          'Dono da Bola': 16,
+          'Assasinu Credi': 15,
+        },
+        ranking: {
+          Zeh: 20,
+          Isgalamido: 19,
+          'Assasinu Credi': 11,
+          'Dono da Bola': 5,
         },
       })
     }

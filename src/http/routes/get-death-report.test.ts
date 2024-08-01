@@ -12,6 +12,6 @@ describe('GET /reports/deaths (e2e tests)', async () => {
     const response = await request(app.server).get('/reports/deaths').send()
     expect(response.statusCode).toEqual(200)
     expect(response.body).toHaveProperty('matches')
-    expect(response.body.matches).toHaveLength(20)
+    expect(response.body.matches).toHaveLength(21)
   })
 })
