@@ -4,7 +4,7 @@ import { InvalidLogFileError } from './_errors/invalid-log-file-error'
 import { GetMatchReport } from './get-match-report'
 import path from 'node:path'
 
-describe('Get Match Report Use Case', () => {
+describe('Get Match Report Use Case (unit tests)', () => {
   it('should parse a match report with a valid log file', () => {
     const logFilePath = path.join(__dirname, '../../../logs/qgames-sample.log')
     const logRepository = new LogRepository(logFilePath)
