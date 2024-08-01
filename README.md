@@ -29,9 +29,11 @@ pnpm run start
 - 2. Deaths Report
 - You can run the reports using the `Try it out` button on the top right corner of the page.
 
-
 ### Some comments about the solution
 
 - Since this version is working with a fixed log file, the unit tests were able to cover the majority of the codebase.
 - Although the log file is fixed, the LogRepository is ready to receive any log file.
 - Changed the JSON output for matches to use as array instead of object, each item in the array is a match, with a unique id.
+- A simple CI pipeline was implemented using GitHub Actions to run the unit tests
+- The project was set up to use eslint and prettier, with some custom rules to enforce the code style.
+- There are some comments with `TODO` in the code, for future improvements.

@@ -7,7 +7,6 @@ type FastifyErrorHandler = FastifyInstance['errorHandler']
 
 export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
   if (error instanceof ZodError) {
-    console.log(error.flatten().fieldErrors)
     return reply.status(400).send({
       message: error.flatten().fieldErrors,
     })
