@@ -32,7 +32,7 @@ You can also try the API using the `Try it out` and then clicking on the `Execut
 
 ## Some comments about the solution for this test
 
-- Although the log file is fixed, the LogRepository is ready to receive any log file.
+- Although the log file is fixed on the API side, the LogRepository is ready to receive any log file.
 - Changed the JSON output for matches to use as array instead of object, each item in the array is a match, with a unique id.
 - A simple CI pipeline was implemented using GitHub Actions to run the unit and e2e tests.
 - The project was set up to use eslint and prettier, with some custom rules to enforce the code style.

@@ -36,28 +36,60 @@ export class Match {
   private _players: string[] = []
   private _kills: Record<string, number> = {}
   private _kills_by_means: Record<string, number> = {}
+  private _ranking: Record<string, number> = {}
 
   constructor(id: number) {
     this._id = `game_${id}`
   }
 
-  public incTotalKills(): void {
-    this._total_kills = this._total_kills + 1 || 1
+  public updateKills(
+    killer: string,
+    victim: string,
+    deathMeans: string
+  ): string {
+    let parseError: string = ''
+    this.incTotalKills()
+    this.addPlayer(victim)
+    this.addPlayer(killer)
+    this.incKills(killer, victim)
+    if (!this.addDeathMeans(deathMeans)) {
+      parseError = 'InvalidDeathMeansError'
+    }
+    this.updateRanking(killer, victim)
+    return parseError
+  }
+
+  private updateRanking(killer: string, victim: string): void {
+    const incrementScoreRule = killer !== '<world>' && victim !== killer
+    const decrementScoreRule = killer === '<world>' || victim === killer
+
+    if (incrementScoreRule) {
+      this._ranking[killer] += 1
+    }
+    if (decrementScoreRule) {
+      this._ranking[victim] -= 1
+    }
+  }
+
+  private incTotalKills(): void {
+    this._total_kills += 1
   }
 
   public addPlayer(player: string): void {
     if (!this._players.includes(player) && player !== '<world>') {
       this._players.push(player)
+      this._ranking[player] = 0
+      this._kills[player] = 0
     }
   }
 
-  public incKills(player: string): void {
-    if (player !== '<world>') {
-      this._kills[player] = this._kills[player] + 1 || 1
+  private incKills(killer: string, victim: string): void {
+    if (killer !== victim && killer !== '<world>') {
+      this._kills[killer] += 1
     }
   }
 
-  public addDeathMeans(death_means: string): boolean {
+  private addDeathMeans(death_means: string): boolean {
     if (death_means in meansOfDeath) {
       this._kills_by_means[death_means] =
         this._kills_by_means[death_means] + 1 || 1
@@ -68,19 +100,25 @@ export class Match {
   }
 
   public MatchesToJSON() {
+    const ranking = Object.entries(this._ranking).sort((a, b) => b[1] - a[1])
+    const kills = Object.entries(this._kills).sort((a, b) => b[1] - a[1])
     return {
       id: this._id,
       total_kills: this._total_kills,
       players: this._players,
-      kills: this._kills,
+      kills: Object.fromEntries(kills),
+      ranking: Object.fromEntries(ranking),
     }
   }
 
   public DeathsToJSON() {
+    const kills_by_means = Object.entries(this._kills_by_means).sort(
+      (a, b) => b[1] - a[1]
+    )
     return {
       id: this._id,
       total_kills: this._total_kills,
-      kills_by_means: this._kills_by_means,
+      kills_by_means: Object.fromEntries(kills_by_means),
     }
   }
 }

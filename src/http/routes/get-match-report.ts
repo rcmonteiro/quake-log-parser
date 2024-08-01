@@ -16,19 +16,13 @@ export const getMatchReportController = async (app: FastifyInstance) => {
           'Fetches a report with player rankings, and grouped match information',
         response: {
           200: z.object({
-            ranking: z.array(
-              z.object({
-                rank: z.number(),
-                player: z.string(),
-                score: z.number(),
-              })
-            ),
             matches: z.array(
               z.object({
                 id: z.string(),
                 total_kills: z.number().nullable().default(0),
                 players: z.array(z.string()),
                 kills: z.record(z.string(), z.number()),
+                ranking: z.record(z.string(), z.number()),
               })
             ),
           }),

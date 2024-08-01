@@ -6,16 +6,12 @@ import { InvalidLogFileError } from './_errors/invalid-log-file-error'
 type GetMatchReportResponse = Either<
   InvalidDeathMeansError,
   {
-    ranking: {
-      player: string
-      score: number
-      rank: number
-    }[]
     matches: {
       id: string
       total_kills: number
       players: string[]
       kills: Record<string, number>
+      ranking: Record<string, number>
     }[]
   }
 >
@@ -33,8 +29,7 @@ export class GetMatchReport {
       }
     }
     const matches = this.logRepository.findAllMatches()
-    const ranking = this.logRepository.getRanking()
 
-    return right({ ranking, matches })
+    return right({ matches })
   }
 }
