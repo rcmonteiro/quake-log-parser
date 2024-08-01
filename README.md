@@ -27,6 +27,7 @@ pnpm run start
 - You can fetch two types of reports:
 - 1. Matches Report
 - 2. Deaths Report
+- You can run the reports using the `Try it out` button on the top right corner of the page.
 
 
 ### Some comments about the solution
