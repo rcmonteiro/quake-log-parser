@@ -1,9 +1,9 @@
 import { LogRepository } from '@/application/repositories/log-repository'
 import { GetMatchReport } from '@/application/use-cases/get-match-report'
-import { env } from '@/env'
 import { BadRequestError } from '@/http/_errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import path from 'node:path'
 import { z } from 'zod'
 
 export const getMatchReportController = async (app: FastifyInstance) => {
@@ -37,7 +37,8 @@ export const getMatchReportController = async (app: FastifyInstance) => {
     },
 
     async (request, reply) => {
-      const logRepository = new LogRepository(env.LOGFILE_PATH)
+      const logFilePath = path.join(process.cwd(), './logs/qgames.log')
+      const logRepository = new LogRepository(logFilePath)
       const parseMatchReport = new GetMatchReport(logRepository)
 
       const result = parseMatchReport.execute()

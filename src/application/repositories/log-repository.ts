@@ -9,38 +9,46 @@ export class LogRepository {
   constructor(logPath: string) {
     try {
       const data = this.readLogFile(logPath)
-      this.parseLog(data)
+      if (data) {
+        this.parseLog(data)
+      }
     } catch (error) {
       this.parseError = 'InvalidLogFileError'
       console.error(error) // TODO: Set observability integration
     }
   }
 
-  private readLogFile(logPath: string): string[] {
-    const data = readFileSync(logPath, 'utf8')
-    return data.split('\n')
+  private readLogFile(logPath: string): string[] | void {
+    try {
+      const data = readFileSync(logPath, 'utf8')
+      return data.split('\n')
+    } catch (error) {
+      this.parseError = 'InvalidLogFileError'
+      console.error(error) // TODO: Set observability integration
+    }
   }
 
   private parseLog(data: string[]): void {
     let currentMatch: Match
     let gameCount = 0
+    const gameInitPattern = /^\s*\d{1,2}:\d{2}\sInitGame:/
     const killPattern =
       /^\s*\d{1,2}:\d{2}\sKill:\s[0-9]+\s[0-9]+\s[0-9]+:\s([<>a-zA-Z0-9 ]+)\skilled\s([a-zA-Z0-9 ]+)\sby\s([A-Z_]+)$/
 
     data.forEach((line) => {
-      if (/^\s*\d{1,2}:\d{2}\sInitGame:/.test(line)) {
+      if (gameInitPattern.test(line)) {
         gameCount++
         currentMatch = new Match(gameCount)
         this.matches.push(currentMatch)
       }
 
       if (killPattern.test(line)) {
-        const [, killer, victim, death_means] = killPattern.exec(line) || []
+        const [, killer, victim, deathMeans] = killPattern.exec(line) || []
         currentMatch.incTotalKills()
         currentMatch.addPlayer(victim)
-        currentMatch.addPlayer(victim)
+        currentMatch.addPlayer(killer)
         currentMatch.incKills(killer)
-        if (!currentMatch.addDeathMeans(death_means)) {
+        if (!currentMatch.addDeathMeans(deathMeans)) {
           this.parseError = 'InvalidDeathMeansError'
         }
         this.updateRanking(killer, victim)
