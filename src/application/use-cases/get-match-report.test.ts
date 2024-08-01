@@ -1,5 +1,6 @@
 import { LogRepository } from '../repositories/log-repository'
-import { InvalidDeathMeansError } from './_errors/invalid-death-means-error copy'
+import { InvalidDeathMeansError } from './_errors/invalid-death-means-error'
+import { InvalidLogFileError } from './_errors/invalid-log-file-error'
 import { GetMatchReport } from './get-match-report'
 import path from 'node:path'
 
@@ -43,5 +44,18 @@ describe('Get Match Report Use Case', () => {
     const result = sut.execute()
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(InvalidDeathMeansError)
+  })
+
+  it('should not parse a match report with a invalid log file - wrong file path', async () => {
+    const logFilePath = path.join(
+      __dirname,
+      '../../../logs/qgames-inexistent-file.log'
+    )
+    const logRepository = new LogRepository(logFilePath)
+    const sut = new GetMatchReport(logRepository)
+
+    const result = sut.execute()
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(InvalidLogFileError)
   })
 })

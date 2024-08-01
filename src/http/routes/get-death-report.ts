@@ -1,9 +1,9 @@
 import { LogRepository } from '@/application/repositories/log-repository'
 import { GetDeathReport } from '@/application/use-cases/get-death-report'
+import { env } from '@/env'
 import { BadRequestError } from '@/http/_errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
-import path from 'node:path'
 import { z } from 'zod'
 
 export const getDeathReportController = async (app: FastifyInstance) => {
@@ -12,7 +12,8 @@ export const getDeathReportController = async (app: FastifyInstance) => {
     {
       schema: {
         tags: ['Reports'],
-        summary: 'Fetch Death Report by Death Means',
+        summary:
+          'Fetches a report by Death Means grouped by Match ID with total kills',
         response: {
           200: z.object({
             matches: z.array(
@@ -28,8 +29,7 @@ export const getDeathReportController = async (app: FastifyInstance) => {
     },
 
     async (request, reply) => {
-      const logFilePath = path.join(__dirname, '../../../logs/qgames.log')
-      const logRepository = new LogRepository(logFilePath)
+      const logRepository = new LogRepository(env.LOGFILE_PATH)
       const parseMatchReport = new GetDeathReport(logRepository)
 
       const result = parseMatchReport.execute()

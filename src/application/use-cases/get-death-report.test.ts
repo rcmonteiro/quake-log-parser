@@ -1,10 +1,12 @@
 import { LogRepository } from '../repositories/log-repository'
-import { InvalidDeathMeansError } from './_errors/invalid-death-means-error copy'
+import { InvalidDeathMeansError } from './_errors/invalid-death-means-error'
+import { InvalidLogFileError } from './_errors/invalid-log-file-error'
+
 import { GetDeathReport } from './get-death-report'
 import path from 'node:path'
 
 describe('Get Death Report Use Case', () => {
-  it('should parse a match report with a valid log file', () => {
+  it('should parse a death report with a valid log file', () => {
     const logFilePath = path.join(__dirname, '../../../logs/qgames-sample.log')
     const logRepository = new LogRepository(logFilePath)
     const sut = new GetDeathReport(logRepository)
@@ -33,7 +35,7 @@ describe('Get Death Report Use Case', () => {
     }
   })
 
-  it('should not parse a match report with a invalid log file - wrong death means', async () => {
+  it('should not parse a death report with a invalid log file - wrong death means', async () => {
     const logFilePath = path.join(
       __dirname,
       '../../../logs/qgames-wrong-death-means.log'
@@ -44,5 +46,18 @@ describe('Get Death Report Use Case', () => {
     const result = sut.execute()
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(InvalidDeathMeansError)
+  })
+
+  it('should not parse a death report with a invalid log file - wrong file path', async () => {
+    const logFilePath = path.join(
+      __dirname,
+      '../../../logs/qgames-inexistent-file.log'
+    )
+    const logRepository = new LogRepository(logFilePath)
+    const sut = new GetDeathReport(logRepository)
+
+    const result = sut.execute()
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(InvalidLogFileError)
   })
 })

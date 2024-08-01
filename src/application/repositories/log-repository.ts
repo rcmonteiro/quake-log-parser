@@ -7,8 +7,13 @@ export class LogRepository {
   public parseError: string = ''
 
   constructor(logPath: string) {
-    const data = this.readLogFile(logPath)
-    this.parseLog(data)
+    try {
+      const data = this.readLogFile(logPath)
+      this.parseLog(data)
+    } catch (error) {
+      this.parseError = 'InvalidLogFileError'
+      console.error(error) // TODO: Set observability integration
+    }
   }
 
   private readLogFile(logPath: string): string[] {
