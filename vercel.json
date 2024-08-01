@@ -1,16 +1,21 @@
 {
   "version": 2,
   "builds": [
-      {
-          "src": "dist/http/server.js",
-          "use": "@vercel/node",
-          "config": { "includeFiles": ["dist/**"] }
+    {
+      "src": "src/http/server.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "src/**/*",
+          "tsconfig.json"
+        ]
       }
+    }
   ],
   "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "dist/http/server.js"
-      }
+    {
+      "src": "/(.*)",
+      "dest": "/src/http/server.ts"
+    }
   ]
 }
