@@ -102,12 +102,14 @@ export class Match {
   public MatchesToJSON() {
     const ranking = Object.entries(this._ranking).sort((a, b) => b[1] - a[1])
     const kills = Object.entries(this._kills).sort((a, b) => b[1] - a[1])
+    const players = [...this._players].sort()
     return {
-      id: this._id,
-      total_kills: this._total_kills,
-      players: this._players,
-      kills: Object.fromEntries(kills),
-      ranking: Object.fromEntries(ranking),
+      [this._id]: {
+        total_kills: this._total_kills,
+        players,
+        kills: Object.fromEntries(kills),
+        ranking: Object.fromEntries(ranking),
+      },
     }
   }
 
@@ -116,9 +118,10 @@ export class Match {
       (a, b) => b[1] - a[1]
     )
     return {
-      id: this._id,
-      total_kills: this._total_kills,
-      kills_by_means: Object.fromEntries(kills_by_means),
+      [this._id]: {
+        total_kills: this._total_kills,
+        kills_by_means: Object.fromEntries(kills_by_means),
+      },
     }
   }
 }

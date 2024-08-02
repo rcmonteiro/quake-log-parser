@@ -17,13 +17,15 @@ export const getMatchReportController = async (app: FastifyInstance) => {
         response: {
           200: z.object({
             matches: z.array(
-              z.object({
-                id: z.string(),
-                total_kills: z.number().nullable().default(0),
-                players: z.array(z.string()),
-                kills: z.record(z.string(), z.number()),
-                ranking: z.record(z.string(), z.number()),
-              })
+              z.record(
+                z.string(),
+                z.object({
+                  total_kills: z.number().nullable().default(0),
+                  players: z.array(z.string()),
+                  kills: z.record(z.string(), z.number()),
+                  ranking: z.record(z.string(), z.number()),
+                })
+              )
             ),
           }),
         },
@@ -33,6 +35,7 @@ export const getMatchReportController = async (app: FastifyInstance) => {
     async (request, reply) => {
       const logFilePath = path.join(process.cwd(), './logs/qgames.log')
       const logRepository = new LogRepository(logFilePath)
+      await logRepository['parsingComplete']
       const parseMatchReport = new GetMatchReport(logRepository)
 
       const result = parseMatchReport.execute()

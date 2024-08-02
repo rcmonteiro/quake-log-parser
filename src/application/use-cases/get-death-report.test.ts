@@ -6,21 +6,20 @@ import { GetDeathReport } from './get-death-report'
 import path from 'node:path'
 
 describe('Get Death Report Use Case (unit tests)', () => {
-  it('should parse a death report with a valid log file', () => {
+  it('should parse a death report with a valid log file', async () => {
     const logFilePath = path.join(__dirname, '../../../logs/qgames-sample.log')
     const logRepository = new LogRepository(logFilePath)
+    await logRepository['parsingComplete']
     const sut = new GetDeathReport(logRepository)
 
     const result = sut.execute()
     expect(result.isRight()).toBe(true)
     if (result.isRight()) {
-      expect(result.value?.matches[0]).toEqual({
-        id: 'game_1',
+      expect(result.value?.matches[0].game_1).toEqual({
         total_kills: 0,
         kills_by_means: {},
       })
-      expect(result.value?.matches[1]).toEqual({
-        id: 'game_2',
+      expect(result.value?.matches[1].game_2).toEqual({
         total_kills: 105,
         kills_by_means: {
           MOD_ROCKET_SPLASH: 51,
@@ -41,6 +40,7 @@ describe('Get Death Report Use Case (unit tests)', () => {
       '../../../logs/qgames-wrong-death-means.log'
     )
     const logRepository = new LogRepository(logFilePath)
+    await logRepository['parsingComplete']
     const sut = new GetDeathReport(logRepository)
 
     const result = sut.execute()
@@ -54,6 +54,7 @@ describe('Get Death Report Use Case (unit tests)', () => {
       '../../../logs/qgames-inexistent-file.log'
     )
     const logRepository = new LogRepository(logFilePath)
+    await logRepository['parsingComplete']
     const sut = new GetDeathReport(logRepository)
 
     const result = sut.execute()

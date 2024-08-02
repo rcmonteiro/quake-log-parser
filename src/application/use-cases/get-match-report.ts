@@ -6,13 +6,15 @@ import { InvalidLogFileError } from './_errors/invalid-log-file-error'
 type GetMatchReportResponse = Either<
   InvalidDeathMeansError,
   {
-    matches: {
-      id: string
-      total_kills: number
-      players: string[]
-      kills: Record<string, number>
-      ranking: Record<string, number>
-    }[]
+    matches: Record<
+      string,
+      {
+        total_kills: number
+        players: string[]
+        kills: Record<string, number>
+        ranking: Record<string, number>
+      }
+    >[]
   }
 >
 
