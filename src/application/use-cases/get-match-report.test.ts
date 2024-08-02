@@ -17,12 +17,8 @@ describe('Get Match Report Use Case (unit tests)', () => {
       expect(result.value?.matches[0].game_1).toEqual({
         total_kills: 0,
         players: ['Isgalamido'],
-        kills: {
-          Isgalamido: 0,
-        },
-        ranking: {
-          Isgalamido: 0,
-        },
+        kills: {},
+        ranking: {},
       })
       expect(result.value?.matches[1].game_2).toEqual({
         total_kills: 105,
