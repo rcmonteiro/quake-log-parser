@@ -1,5 +1,3 @@
-Here's the updated README.md with the additional information about the API's potential delay when hosted on Render:
-
 # Quake Log Parser API
 
 ## Use the API Deployed on Render
