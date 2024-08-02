@@ -35,7 +35,7 @@ export const getMatchReportController = async (app: FastifyInstance) => {
     async (request, reply) => {
       const logFilePath = path.join(process.cwd(), './logs/qgames.log')
       const logRepository = new LogRepository(logFilePath)
-      await logRepository['parsingComplete']
+      await logRepository.waitForParsing()
       const parseMatchReport = new GetMatchReport(logRepository)
 
       const result = parseMatchReport.execute()

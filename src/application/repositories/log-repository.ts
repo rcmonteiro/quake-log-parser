@@ -11,14 +11,8 @@ export class LogRepository {
     this.parsingComplete = this.parseLog(logPath)
   }
 
-  private async waitForParsing(): Promise<void> {
+  public async waitForParsing(): Promise<void> {
     await this.parsingComplete
-  }
-
-  private async ensureParsed(): Promise<void> {
-    if (!this.parsingComplete) {
-      await this.waitForParsing()
-    }
   }
 
   private async parseLog(logPath: string): Promise<void> {

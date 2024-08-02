@@ -33,7 +33,7 @@ export const getDeathReportController = async (app: FastifyInstance) => {
     async (request, reply) => {
       const logFilePath = path.join(process.cwd(), './logs/qgames.log')
       const logRepository = new LogRepository(logFilePath)
-      await logRepository['parsingComplete']
+      await logRepository.waitForParsing()
       const parseMatchReport = new GetDeathReport(logRepository)
 
       const result = parseMatchReport.execute()

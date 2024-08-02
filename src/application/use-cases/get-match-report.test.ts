@@ -8,7 +8,7 @@ describe('Get Match Report Use Case (unit tests)', () => {
   it('should parse a match report with a valid log file', async () => {
     const logFilePath = path.join(__dirname, '../../../logs/qgames-sample.log')
     const logRepository = new LogRepository(logFilePath)
-    await logRepository['parsingComplete']
+    await logRepository.waitForParsing()
     const sut = new GetMatchReport(logRepository)
 
     const result = sut.execute()
@@ -49,7 +49,7 @@ describe('Get Match Report Use Case (unit tests)', () => {
       '../../../logs/qgames-wrong-death-means.log'
     )
     const logRepository = new LogRepository(logFilePath)
-    await logRepository['parsingComplete']
+    await logRepository.waitForParsing()
     const sut = new GetMatchReport(logRepository)
 
     const result = sut.execute()
@@ -63,7 +63,7 @@ describe('Get Match Report Use Case (unit tests)', () => {
       '../../../logs/qgames-inexistent-file.log'
     )
     const logRepository = new LogRepository(logFilePath)
-    await logRepository['parsingComplete']
+    await logRepository.waitForParsing()
     const sut = new GetMatchReport(logRepository)
 
     const result = sut.execute()

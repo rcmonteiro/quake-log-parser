@@ -39,6 +39,7 @@ Access the Swagger UI at [http://localhost:4000/docs](http://localhost:4000/docs
 
 ## Some Comments on the Proposed Solution
 
+- Regarding the scoring rules, to align with the Quake game score, it was assumed that the player gains 1 point for each kill, as long as the victim is not the player themselves. The player loses 1 point each time they are killed by the <world> or by themselves.
 - The log path was hardcoded both in the API routes and the tests. However, a `LogRepository` was created that accepts any file, facilitating future updates to allow different log files to be read.
 - Although the project could have been delivered as a CLI, a domain and application layer was developed in an agnostic manner. This approach allows it to be consumed by any interaction form. After creating unit tests and validating business rules, I decided to build a simple API with Swagger documentation to expose the log parsing in a more interactive way.
 - To avoid memory overflow when reading large files, the logs are read line by line in a read stream.
