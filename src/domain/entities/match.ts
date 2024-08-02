@@ -64,9 +64,15 @@ export class Match {
     const decrementScoreRule = killer === '<world>' || victim === killer
 
     if (incrementScoreRule) {
+      if (this._ranking[killer] === undefined) {
+        this._ranking[killer] = 0
+      }
       this._ranking[killer] += 1
     }
     if (decrementScoreRule) {
+      if (this._ranking[victim] === undefined) {
+        this._ranking[victim] = 0
+      }
       this._ranking[victim] -= 1
     }
   }
@@ -78,13 +84,14 @@ export class Match {
   public addPlayer(player: string): void {
     if (!this._players.includes(player) && player !== '<world>') {
       this._players.push(player)
-      this._ranking[player] = 0
-      this._kills[player] = 0
     }
   }
 
   private incKills(killer: string, victim: string): void {
     if (killer !== victim && killer !== '<world>') {
+      if (this._kills[killer] === undefined) {
+        this._kills[killer] = 0
+      }
       this._kills[killer] += 1
     }
   }
